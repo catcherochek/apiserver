@@ -21,6 +21,8 @@ class DummyDataFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => DummyData::class,
+            'csrf_protection'=>false,
+            'validation_groups' => false
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\DummyData;
+use App\Form\DummyDataFormType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,10 +32,32 @@ class DummyDataController extends FOSRestController
     /**
      * @Rest\Get("/dummyget")
      *
+     * @return Response
      */
      public function getMovieAction(){
          $repository=$this->getDoctrine()->getRepository(DummyData::class);
          $movies=$repository->findall();
          return $this->handleView($this->view($movies));
+     }
+
+    /**
+     * @Rest\Post("/dummypost")
+     * @param Request $request
+     *
+     * @return Response
+     */
+     public function postDummyAction(Request $request){
+         $dummy  = new DummyData();
+         $form = $this->createForm(DummyDataFormType::class,$dummy);
+         $data=json_decode($request->getContent(),true);
+         $form->submit($data);
+         if($form->isValid()){
+             $em=$this->getDoctrine()->getManager();
+             $em->persist($dummy);
+             $em->flush();
+             return $this->handleView($this->view(['status'=>'ok'],Response::HTTP_CREATED));
+         }
+         return $this->handleView($this->view($form->getErrors()));
+
      }
 }
