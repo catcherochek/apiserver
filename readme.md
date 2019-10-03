@@ -4,6 +4,12 @@ Post & Get
 
 ### Installing
 
+download project
+
+```
+git clone https://github.com/catcherochek/apiserver
+```
+
 open your terminal run in server directory to install dependencies
 
 ```
